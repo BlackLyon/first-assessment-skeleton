@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.cooksys.assessment.model.UserList;
 import com.cooksys.assessment.server.Server;
 
 public class Main {
@@ -20,8 +21,12 @@ public class Main {
 		Server server = new Server(8080, executor);
 		
 		Future<?> done = executor.submit(server);
+		UserList users = new UserList();
 		
 		try {
+			//users.AddUsers("Duane");
+			//users.AddUsers("Rick");
+			//log.info(users.GetUsers().toString());
 			done.get();
 			executor.shutdown();
 			executor.awaitTermination(5, TimeUnit.SECONDS);

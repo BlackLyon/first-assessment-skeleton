@@ -12,11 +12,11 @@ cli
   .delimiter(cli.chalk['yellow']('ftd~$'))
 
 cli
-  .mode('connect <username>')
+  .mode('connect <username> <host> <port>')
   .delimiter(cli.chalk['green']('connected>'))
   .init(function (args, callback) {
     username = args.username
-    server = connect({ host: 'localhost', port: 8080 }, () => {
+    server = connect({ host: args.host, port: args.port }, () => {
       server.write(new Message({ username, command: 'connect' }).toJSON() + '\n')
       callback()
     })
@@ -37,6 +37,10 @@ cli
       server.end(new Message({ username, command }).toJSON() + '\n')
     } else if (command === 'echo') {
       server.write(new Message({ username, command, contents }).toJSON() + '\n')
+    } else if (command === 'users') {
+      server.write(new Message({username, command}).toJSON() + '\n')
+    } else if (command === 'direct') {
+      server.write(new Message({username, command}).toJSON() + '\n')
     } else {
       this.log(`Command <${command}> was not recognized`)
     }

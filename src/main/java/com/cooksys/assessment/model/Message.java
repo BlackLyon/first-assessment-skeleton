@@ -5,6 +5,15 @@ public class Message {
 	private String username;
 	private String command;
 	private String contents;
+	private String receiver;
+
+	public String getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
+	}
 
 	public String getUsername() {
 		return username;
