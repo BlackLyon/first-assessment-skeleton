@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,6 @@ public class ClientHandler implements Runnable {
 
 			ObjectMapper mapper = new ObjectMapper();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 
 			while (!socket.isClosed()) {
 				String raw = reader.readLine();
@@ -40,32 +38,26 @@ public class ClientHandler implements Runnable {
 				switch (message.getCommand()) {
 					case "connect":
 						log.info("user <{}> connected", message.getUsername());
-						users.AddUsers(message.getUsername());
-						log.info("User List contains: <{}>", users.GetUsers().toString());
+						users.AddUsers(message.getUsername(), socket);
 						break;
 					case "disconnect":
 						log.info("user <{}> disconnected", message.getUsername());
 						users.RemoveUsers(message.getUsername());
-						log.info("User List contains: <{}>", users.GetUsers().toString());
 						this.socket.close();
 						break;
 					case "echo":
 						log.info("user <{}> echoed message <{}>", message.getUsername(), message.getContents());
-						String response = mapper.writeValueAsString(message);
-						log.info("Message contains: <{}>", message.getContents());
-						writer.write(response);
-						writer.flush();
+						users.Echo(message);
 						break;
 					case "users":
 						log.info("'user <{}> requested user list.", message.getUsername());
-						message.setContents(users.GetUsers().toString());
-						String re = mapper.writeValueAsString(message);
-						log.info("Re contains: <{}>", re);
-						writer.write(re);
-						writer.flush();
+						users.GetUsers(message);
 						break;
-					case "direct duane":
+					case "@":
 						log.info("'user <{}> requested direct message.", message.getUsername());
+						log.info("Direct Message Contents <{}>.", message.getContents());
+						log.info("Direct Message Command <{}>.", message.getCommand());
+						users.DirectMessage(message);
 						break;
 				}
 			}

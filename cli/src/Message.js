@@ -7,15 +7,13 @@ export class Message {
     this.username = username
     this.command = command
     this.contents = contents
-    this.receiver = receiver
   }
 
   toJSON () {
     return JSON.stringify({
       username: this.username,
       command: this.command,
-      contents: this.contents,
-      receiver: this.receiver
+      contents: this.contents
     })
   }
 

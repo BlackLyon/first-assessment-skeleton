@@ -21,12 +21,8 @@ public class Main {
 		Server server = new Server(8080, executor);
 		
 		Future<?> done = executor.submit(server);
-		UserList users = new UserList();
 		
 		try {
-			//users.AddUsers("Duane");
-			//users.AddUsers("Rick");
-			//log.info(users.GetUsers().toString());
 			done.get();
 			executor.shutdown();
 			executor.awaitTermination(5, TimeUnit.SECONDS);
