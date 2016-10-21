@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cooksys.assessment.model.UserList;
 import com.cooksys.assessment.server.Server;
 
 public class Main {

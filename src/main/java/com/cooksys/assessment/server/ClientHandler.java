@@ -3,8 +3,6 @@ package com.cooksys.assessment.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.slf4j.Logger;
@@ -39,10 +37,16 @@ public class ClientHandler implements Runnable {
 					case "connect":
 						log.info("user <{}> connected", message.getUsername());
 						users.AddUsers(message.getUsername(), socket);
+						String newUser = String.format("User %s has connected", message.getUsername());
+						message.setContents(newUser);
+						users.ServerMessage(message);
 						break;
 					case "disconnect":
 						log.info("user <{}> disconnected", message.getUsername());
 						users.RemoveUsers(message.getUsername());
+						newUser = String.format("User %s has disconnected", message.getUsername());
+						message.setContents(newUser);
+						users.ServerMessage(message);
 						this.socket.close();
 						break;
 					case "echo":
@@ -55,9 +59,11 @@ public class ClientHandler implements Runnable {
 						break;
 					case "@":
 						log.info("'user <{}> requested direct message.", message.getUsername());
-						log.info("Direct Message Contents <{}>.", message.getContents());
-						log.info("Direct Message Command <{}>.", message.getCommand());
 						users.DirectMessage(message);
+						break;
+					case "broadcast":
+						log.info("User <{}> is broadcasting a message", message.getUsername());
+						users.Broadcast(message);
 						break;
 				}
 			}

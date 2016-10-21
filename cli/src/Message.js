@@ -3,7 +3,7 @@ export class Message {
     return new Message(JSON.parse(buffer.toString()))
   }
 
-  constructor ({ username, command, contents, receiver }) {
+  constructor ({ username, command, contents }) {
     this.username = username
     this.command = command
     this.contents = contents
