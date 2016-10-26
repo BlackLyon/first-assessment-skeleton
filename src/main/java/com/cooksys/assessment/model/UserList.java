@@ -124,13 +124,13 @@ public class UserList {
 	{
 		java.util.Date date = new java.util.Date();
 		java.sql.Timestamp timestamp =  new java.sql.Timestamp(date.getTime());;
+		String name = msg.getContents().split(" ")[0];
 		
 		try {
-			String name = msg.getContents().split(" ")[0];
-			writer = new PrintWriter(new OutputStreamWriter(users.get(name).getOutputStream()));
 			
 			if(users.containsKey(name))
 			{
+				writer = new PrintWriter(new OutputStreamWriter(users.get(name).getOutputStream()));
 				String temp = String.format("{%s} <%s> (whisper): %s", timestamp, msg.getUsername(), msg.getContents().replaceFirst(name, ""));
 				msg.setContents(temp);
 				String response = mapper.writeValueAsString(msg);
@@ -139,6 +139,7 @@ public class UserList {
 			}
 			else 
 			{
+				writer = new PrintWriter(new OutputStreamWriter(users.get(msg.getUsername()).getOutputStream()));
 				String temp = String.format("{%s} <%s> is not connected", timestamp, name);
 				msg.setContents(temp);
 				String response = mapper.writeValueAsString(msg);
